@@ -1,0 +1,73 @@
+<apex:page controller="nleMetadataObjectsController">
+    <apex:form id="googleAuthForm">
+        <apex:actionFunction name="setAnchor" action="{!methodOne}">
+            <apex:param assignTo="{!anchorElement}" value="" />
+        </apex:actionFunction>
+    
+        <apex:pageBlock mode="edit" title="Domains">
+            <apex:commandButton value="New Domain Config" action="{!newConfig}"/>
+
+            <apex:selectList value="{!currentOrgConfigId}" multiselect="false" size="1">
+                <apex:actionSupport event="onchange" action="{!changeOrgConfig}"  rerender="objects_table"/>
+                <apex:selectOptions value="{!orgConfigSelectOptions}"></apex:selectOptions>
+            </apex:selectList>
+        </apex:pageBlock>
+        
+        <apex:pageBlock title="Objects" id="objects_table">
+            
+            <apex:commandButton value="Connect To Org" action="{!connectToOrg}" rendered="{!!isConnected}"/>
+            <apex:commandButton value="Refresh" action="{!refreshObjects}" rendered="{!isConnected}"/>
+            <apex:commandButton value="Revoke Connect" action="{!revokeToOrg}" rendered="{!isConnected}"/>
+            <apex:commandbutton value="Export to DD" action="{!exportDD}" rendered="{!isConnected}"/>
+            <apex:messages />
+
+            <apex:pageBlockSection Title="List of Available Objects" rendered="{!isConnected}">
+				<apex:dataTable value="{!jObjects}" var="a" columnswidth="50px,150px" cellpadding="2" border="1">
+					<apex:column >
+						<apex:facet name="header"> <apex:inputCheckbox >
+						<apex:actionSupport event="onclick" onsubmit="checkAll(this)" rerender="Selected_PBS"/>
+						</apex:inputCheckbox></apex:facet>
+						<apex:inputCheckbox value="{!a.selected}" id="checkedone">
+						<apex:actionSupport event="onclick" rerender="Selected_PBS"/>
+						</apex:inputCheckbox>
+					</apex:column>
+					<apex:column headervalue="Object Name" value="{!a.objectLabel}" />
+				</apex:dataTable>
+			</apex:pageBlockSection>
+
+            <apex:pageBlockButtons >
+            	<apex:commandButton value="Save" action="{!saveSelectedObjects}" />
+            </apex:pageBlockButtons>
+            
+        </apex:pageBlock>
+		
+    </apex:form>
+
+    <script>
+        /*
+        function func1() {
+             var achorElement = window.location.hash.substring(1);
+             //alert("achorElement: " + achorElement);
+             setAnchor(achorElement);
+        }
+        
+        window.onload=func1;
+        */
+
+        window.onload = function(){
+            var achorElement = window.location.hash.substring(1);
+             alert("achorElement: " + achorElement);
+             //setAnchor(achorElement);
+        };
+
+	   function checkAll(cb)
+		{
+			var inputElem = document.getElementsByTagName("input");
+			for(var i=0; i<inputElem.length; i++)
+			{
+				if(inputElem[i].id.indexOf("checkedone")!=-1)
+				inputElem[i].checked = cb.checked;
+			}
+		}    
+	</script>
+</apex:page>
