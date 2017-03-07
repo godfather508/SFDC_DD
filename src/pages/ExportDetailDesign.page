@@ -1,0 +1,63 @@
+<apex:page controller="nleMetadataObjectsController" contentType="txt/xml#myTest.xls" cache="true">
+    <apex:outputText value="{!xlsHeader}"/>
+    <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+              xmlns:o="urn:schemas-microsoft-com:office:office"
+              xmlns:x="urn:schemas-microsoft-com:office:excel"
+              xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+              xmlns:html="http://www.w3.org/TR/REC-html40">
+        <Styles>
+            <Style ss:ID="s1">
+                <Alignment/>
+                <Borders/>
+                <Font ss:Bold="1"/>
+                <Interior/>
+                <NumberFormat/>
+                <Protection/>
+            </Style>
+        </Styles>
+        <apex:repeat value="{!jObjectDetails}" var="jObjectDetail" id="theRepeat">
+
+            <Worksheet ss:Name="{!jObjectDetail.name}">
+                <Table x:FullColumns="1" x:FullRows="1">
+                    <Column ss:Width="170"/>
+                    <Column ss:Width="280"/>
+                    <Column ss:Width="330"/>
+                    <Column ss:Width="330"/>
+
+                    <!--
+                    
+                    <Column ss:Width="330"/>
+                    <Column ss:Width="330"/>
+                    -->
+                    <Row>
+                        <Cell ss:StyleID="s1"><Data ss:Type="String" >Label</Data></Cell>
+                        <Cell ss:StyleID="s1"><Data ss:Type="String" >Name</Data></Cell>
+                        <Cell ss:StyleID="s1"><Data ss:Type="String" >Type</Data></Cell>
+                        <Cell ss:StyleID="s1"><Data ss:Type="String" >Length</Data></Cell>
+                        <!--
+                        
+                        <Cell ss:StyleID="s1"><Data ss:Type="String" >Length</Data></Cell>
+                        <Cell ss:StyleID="s1"><Data ss:Type="String" >Nillable</Data></Cell>
+                        -->
+                    </Row>
+                    <apex:repeat value="{!jObjectDetail.fields}" var="field">
+                        <Row>
+                            <Cell><Data ss:Type="String">{!field.label}</Data></Cell>
+                            <Cell><Data ss:Type="String">{!field.name}</Data></Cell>
+                            <Cell><Data ss:Type="String">{!field.type}</Data></Cell>
+                            <Cell><Data ss:Type="String">{!field.byteLength}</Data></Cell>
+
+                            <!--
+                            
+                            <Cell><Data ss:Type="String">{!field.length}</Data></Cell>
+                            <Cell><Data ss:Type="String">{!field.nillable}</Data></Cell>
+                            -->
+                        </Row>
+                    </apex:repeat>
+                </Table>
+
+            </Worksheet>
+        </apex:repeat>
+       
+    </Workbook>
+</apex:page>
